@@ -10,6 +10,7 @@ from campaigns.services import (
     check_dayparting,
     simulate_spend,
     daily_reset,
+    monthly_reset,
     get_or_create_spend,
     get_campaign_status_summary,
 )
@@ -41,7 +42,7 @@ class ServicesTests(TestCase):
 
     def test_check_budget_limits_pauses_on_daily(self) -> None:
         today = timezone.now().date()
-        Spend.objects.create(
+        spend = Spend.objects.create(
             campaign=self.campaign, date=today, daily_spend=Decimal("50.00"), monthly_spend=Decimal("50.00")
         )
         check_budget_limits(self.campaign.id)
