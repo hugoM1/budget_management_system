@@ -5,17 +5,27 @@ PostgreSQL Connection Test Script for Budget Management System
 
 import os
 import sys
+from typing import TypedDict, List
 import psycopg
 from decouple import config
 
-def test_postgresql_connection():
+class DBConfig(TypedDict):
+    name: str
+    host: str
+    port: int
+    user: str
+    password: str
+    database: str
+
+
+def test_postgresql_connection() -> None:
     """Test PostgreSQL connection with different configurations."""
     
     print("Testing PostgreSQL Connection...")
     print("=" * 50)
     
     # Test configurations
-    configs = [
+    configs: List[DBConfig] = [
         {
             'name': 'Default PostgreSQL',
             'host': 'localhost',
@@ -34,28 +44,31 @@ def test_postgresql_connection():
         }
     ]
     
-    for config in configs:
-        print(f"\nTesting: {config['name']}")
-        print(f"Host: {config['host']}:{config['port']}")
-        print(f"User: {config['user']}")
-        print(f"Database: {config['database']}")
+    for cfg in configs:
+        print(f"\nTesting: {cfg['name']}")
+        print(f"Host: {cfg['host']}:{cfg['port']}")
+        print(f"User: {cfg['user']}")
+        print(f"Database: {cfg['database']}")
         
         try:
             # Test connection
             conn = psycopg.connect(
-                host=config['host'],
-                port=config['port'],
-                user=config['user'],
-                password=config['password'],
-                dbname=config['database']
+                host=cfg['host'],
+                port=cfg['port'],
+                user=cfg['user'],
+                password=cfg['password'],
+                dbname=cfg['database'],
             )
             
             # Test query
             with conn.cursor() as cur:
-                cur.execute("SELECT version();")
+                cur.execute("SELECT 1;")
                 version = cur.fetchone()
                 print(f"✅ Connection successful!")
-                print(f"PostgreSQL version: {version[0]}")
+                if version is not None:
+                    print(f"Result: {version[0]}")
+                else:
+                    print("No result returned")
             
             conn.close()
             
@@ -65,7 +78,7 @@ def test_postgresql_connection():
     print("\n" + "=" * 50)
     print("Connection test completed!")
 
-def test_django_postgresql():
+def test_django_postgresql() -> None:
     """Test Django with PostgreSQL settings."""
     
     print("\nTesting Django PostgreSQL Integration...")
@@ -90,7 +103,7 @@ def test_django_postgresql():
     except Exception as e:
         print(f"❌ Django PostgreSQL connection failed: {e}")
 
-def test_postgresql_installation():
+def test_postgresql_installation() -> bool:
     """Test if psycopg is properly installed."""
     
     print("Testing PostgreSQL Installation...")
@@ -113,7 +126,7 @@ def test_postgresql_installation():
     
     return True
 
-def check_postgresql_service():
+def check_postgresql_service() -> None:
     """Check if PostgreSQL service is running."""
     
     print("Checking PostgreSQL Service...")
@@ -139,7 +152,7 @@ def check_postgresql_service():
     except Exception as e:
         print(f"❌ Error checking PostgreSQL service: {e}")
 
-def test_database_creation():
+def test_database_creation() -> None:
     """Test creating the budget_management database."""
     
     print("Testing Database Creation...")

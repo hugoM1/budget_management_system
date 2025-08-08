@@ -27,7 +27,7 @@ from campaigns.tasks import (
 )
 
 
-def test_celery_tasks():
+def test_celery_tasks() -> None:
     """Test Celery tasks."""
     print("Testing Celery Tasks...")
     

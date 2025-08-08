@@ -20,7 +20,7 @@ from campaigns.models import Brand, Campaign, Spend, DaypartingSchedule
 from campaigns.services import track_spend, check_budget_limits, simulate_spend
 
 
-def test_system():
+def test_system() -> None:
     """Test the budget management system."""
     print("Testing Budget Management System...")
     
@@ -94,4 +94,4 @@ def test_system():
 
 
 if __name__ == "__main__":
-    test_system() 
+    test_system()

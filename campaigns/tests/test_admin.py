@@ -32,6 +32,6 @@ class AdminDisplayTests(TestCase):
         html = self.admin.pause_reason_display(self.campaign)
         self.assertIn("-", str(html))
 
-    def _today(self):
+    def _today(self):  # type: ignore[no-untyped-def]
         from django.utils import timezone
         return timezone.now().date()

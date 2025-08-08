@@ -183,8 +183,11 @@ def reset_all_budgets_task(self: Any) -> str:
         raise
 
 
+from typing import Dict
+
+
 @shared_task(bind=True)
-def get_campaign_status_summary_task(self: Any) -> dict:
+def get_campaign_status_summary_task(self: Any) -> Dict[str, int]:
     """
     Task to get campaign status summary.
     
@@ -194,7 +197,7 @@ def get_campaign_status_summary_task(self: Any) -> dict:
     try:
         logger.info("Starting campaign status summary task")
         
-        summary = {
+        summary: Dict[str, int] = {
             'active': Campaign.objects.filter(status=Campaign.Status.ACTIVE).count(),
             'inactive': Campaign.objects.filter(status=Campaign.Status.INACTIVE).count(),
             'paused': Campaign.objects.filter(status=Campaign.Status.PAUSED).count(),
@@ -206,14 +209,29 @@ def get_campaign_status_summary_task(self: Any) -> dict:
         pause_reasons = Campaign.objects.filter(status=Campaign.Status.PAUSED).values('pause_reason').annotate(
             count=models.Count('id')
         )
-        summary['pause_reasons'] = {item['pause_reason']: item['count'] for item in pause_reasons}
-        
-        logger.info(f"Campaign status summary: {summary}")
-        return summary
+        # Nested mapping for diagnostics/logging
+        summary_payload = {item['pause_reason']: item['count'] for item in pause_reasons}
+        return_payload: Dict[str, int] = {
+            'active': summary['active'],
+            'inactive': summary['inactive'],
+            'paused': summary['paused'],
+            'total': summary['total'],
+        }
+        logger.info(
+            "Campaign status summary: %s",
+            {
+                'active': summary['active'],
+                'inactive': summary['inactive'],
+                'paused': summary['paused'],
+                'total': summary['total'],
+                'pause_reasons': summary_payload,
+            },
+        )
+        return return_payload
         
     except Exception as e:
         logger.error(f"Error in campaign status summary task: {e}")
-        return {}
+        return {'active': 0, 'inactive': 0, 'paused': 0, 'total': 0}
 
 
 @shared_task(bind=True)

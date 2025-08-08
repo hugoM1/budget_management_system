@@ -34,7 +34,10 @@ class ModelTests(TestCase):
         s = Spend.objects.create(
             campaign=self.campaign, date=today, daily_spend=Decimal("5.00"), monthly_spend=Decimal("5.00")
         )
-        self.assertEqual(self.campaign.get_current_spend().id, s.id)
+        current = self.campaign.get_current_spend()
+        self.assertIsNotNone(current)
+        assert current is not None
+        self.assertEqual(current.id, s.id)
 
     def test_campaign_is_budget_available(self) -> None:
         today = timezone.now().date()

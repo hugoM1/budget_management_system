@@ -12,7 +12,7 @@ from datetime import time
 class Command(BaseCommand):
     help = 'Create sample data for testing the budget management system'
 
-    def handle(self, *args, **options):
+    def handle(self, *args: object, **options: object) -> None:
         self.stdout.write('Creating sample data...')
         
         # Create sample brands

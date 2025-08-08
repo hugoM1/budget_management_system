@@ -6,7 +6,10 @@ from django.utils import timezone
 from decimal import Decimal
 from .models import Brand, Campaign, Spend, DaypartingSchedule
 
-def login_view(request):
+from django.http import HttpRequest, HttpResponse
+
+
+def login_view(request: HttpRequest) -> HttpResponse:
     """Simple login view for testing."""
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -18,7 +21,7 @@ def login_view(request):
     
     return render(request, 'campaigns/login.html')
 
-def dashboard(request):
+def dashboard(request: HttpRequest) -> HttpResponse:
     """Dashboard view showing budget management overview."""
     
     today = timezone.now().date()
@@ -92,7 +95,7 @@ def dashboard(request):
     return render(request, 'campaigns/dashboard.html', context)
 
 @login_required
-def brand_detail(request, brand_id):
+def brand_detail(request: HttpRequest, brand_id: int) -> HttpResponse:
     """Detailed view for a specific brand."""
     
     try:
