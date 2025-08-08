@@ -138,6 +138,18 @@ python test_celery.py
 python test_system.py
 ```
 
+### Static type checking
+
+The project includes strict static typing with `mypy` and `django-stubs` configured via `mypy.ini`.
+
+```bash
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Run type checks (uses mypy.ini)
+python3 -m mypy .
+```
+
 ### Database Management
 
 ```bash
