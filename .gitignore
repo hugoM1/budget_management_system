@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.env
+*.env
+
+# Django files
+staticfiles/
+media/
+celerybeat-schedule
+logs/
+*.log
+
+# Databases
+*.sqlite3
+
+# Type checking / testing caches
+.mypy_cache/
+.pytest_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

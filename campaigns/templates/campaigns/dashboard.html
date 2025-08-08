@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .brand-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        
+        .brand-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .budget-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .budget-item {
+            text-align: center;
+        }
+        
+        .budget-item .amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .budget-item .label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .warning {
+            color: #e74c3c;
+        }
+        
+        .success {
+            color: #27ae60;
+        }
+        
+        .campaign-list {
+            list-style: none;
+        }
+        
+        .campaign-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .campaign-item:last-child {
+            border-bottom: none;
+        }
+        
+        .campaign-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .campaign-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-paused {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-inactive {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .admin-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .admin-link:hover {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Budget Management Dashboard</h1>
+            <p>Monitor your advertising campaigns and budget performance</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>{{ total_brands }}</h3>
+                <p>Total Brands</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ total_campaigns }}</h3>
+                <p>Total Campaigns</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ active_campaigns }}</h3>
+                <p>Active Campaigns</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ paused_campaigns }}</h3>
+                <p>Paused Campaigns</p>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>${{ total_daily_spend|floatformat:2 }}</h3>
+                <p>Today's Total Spend</p>
+            </div>
+            <div class="stat-card">
+                <h3>${{ total_monthly_spend|floatformat:2 }}</h3>
+                <p>This Month's Total Spend</p>
+            </div>
+        </div>
+        
+        {% if campaigns_needing_attention %}
+        <div class="section">
+            <h2>⚠️ Campaigns Needing Attention</h2>
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> The following campaigns are approaching their budget limits.
+            </div>
+            <div class="brand-grid">
+                {% for item in campaigns_needing_attention %}
+                <div class="brand-card">
+                    <h3>{{ item.campaign.name }}</h3>
+                    <p><strong>Brand:</strong> {{ item.campaign.brand.name }}</p>
+                    <div class="budget-info">
+                        <div class="budget-item">
+                            <div class="amount {% if item.daily_remaining < 50 %}warning{% else %}success{% endif %}">
+                                ${{ item.daily_remaining|floatformat:2 }}
+                            </div>
+                            <div class="label">Daily Remaining</div>
+                        </div>
+                        <div class="budget-item">
+                            <div class="amount {% if item.monthly_remaining < 500 %}warning{% else %}success{% endif %}">
+                                ${{ item.monthly_remaining|floatformat:2 }}
+                            </div>
+                            <div class="label">Monthly Remaining</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="section">
+            <h2>Brand Overview</h2>
+            <div class="brand-grid">
+                {% for summary in brand_summaries %}
+                <div class="brand-card">
+                    <h3>{{ summary.brand.name }}</h3>
+                    <div class="budget-info">
+                        <div class="budget-item">
+                            <div class="amount">${{ summary.daily_spend|floatformat:2 }}</div>
+                            <div class="label">Daily Spend</div>
+                        </div>
+                        <div class="budget-item">
+                            <div class="amount">${{ summary.monthly_spend|floatformat:2 }}</div>
+                            <div class="label">Monthly Spend</div>
+                        </div>
+                    </div>
+                    <div class="budget-info">
+                        <div class="budget-item">
+                            <div class="amount {% if summary.daily_budget_remaining < 100 %}warning{% else %}success{% endif %}">
+                                ${{ summary.daily_budget_remaining|floatformat:2 }}
+                            </div>
+                            <div class="label">Daily Remaining</div>
+                        </div>
+                        <div class="budget-item">
+                            <div class="amount {% if summary.monthly_budget_remaining < 1000 %}warning{% else %}success{% endif %}">
+                                ${{ summary.monthly_budget_remaining|floatformat:2 }}
+                            </div>
+                            <div class="label">Monthly Remaining</div>
+                        </div>
+                    </div>
+                    <p><strong>Campaigns:</strong> {{ summary.active_campaigns }}/{{ summary.campaign_count }} active</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% if paused_campaigns_list %}
+        <div class="section">
+            <h2>Paused Campaigns</h2>
+            <ul class="campaign-list">
+                {% for campaign in paused_campaigns_list %}
+                <li class="campaign-item">
+                    <div class="campaign-name">{{ campaign.name }}</div>
+                    <div><strong>Brand:</strong> {{ campaign.brand.name }}</div>
+                    <div><strong>Reason:</strong> {{ campaign.pause_reason|default:"No reason specified" }}</div>
+                    <span class="campaign-status status-paused">Paused</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <div class="section">
+            <h2>Quick Actions</h2>
+            <a href="/admin/" class="admin-link">Go to Admin Panel</a>
+        </div>
+    </div>
+</body>
+</html> 
