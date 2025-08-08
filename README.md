@@ -59,11 +59,18 @@ Create a `.env` file in the project root:
 ```env
 SECRET_KEY=your-secret-key-here
 DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Database
 DB_NAME=budget_management
 DB_USER=postgres
 DB_PASSWORD=your-password
 DB_HOST=localhost
 DB_PORT=5432
+
+# Celery / Redis
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
 ```
 
 ### 4. Start the Application
@@ -112,13 +119,22 @@ python manage.py create_sample_data
 ### Running Tests
 
 ```bash
+# Run Django unit tests
+python manage.py test -v 2
+
+# Optional: specific app/package
+python manage.py test campaigns.tests -v 2
+```
+
+Manual scripts (optional):
+```bash
 # Test PostgreSQL connection
 python test_postgres.py
 
-# Test Celery tasks
+# Test Celery tasks (queues tasks; requires worker)
 python test_celery.py
 
-# Test system functionality
+# End-to-end functional script
 python test_system.py
 ```
 

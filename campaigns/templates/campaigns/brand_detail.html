@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Brand Detail</title></head>
+<body>
+  <h1>{{ brand.name }}</h1>
+  <ul>
+    {% for item in campaign_data %}
+      <li>{{ item.campaign.name }} - Daily: ${{ item.daily_spend }} - Monthly: ${{ item.monthly_spend }}</li>
+    {% empty %}
+      <li>No campaigns</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
